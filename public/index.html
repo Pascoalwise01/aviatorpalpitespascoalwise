@@ -1,40 +1,52 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aviator Palpites Pascoal Wise</title>
+  <title>Painel Aviator - ElephantBet</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>✈️ Aviator Palpites Pascoal Wise</h1>
-    <p>Palpites automáticos e análise lógica do Aviator ElephantBet</p>
+    <h1>Painel Aviator</h1>
+    <p>Monitor de Rodadas — ElephantBet</p>
   </header>
 
   <main>
-
-    <!-- Palpites automáticos -->
-    <section id="palpites">
-      <h2>🎯 Palpite Automático</h2>
-
-      <div id="ultimaRodada" class="info">Última rodada: --</div>
-      <div id="resultado" class="info">Clique em "Gerar Palpite"</div>
-      <button onclick="gerarPalpite()">Gerar Palpite</button>
-
-      <table id="estatisticas">
-        <tr><th>Gerados</th><th>Acertos</th><th>Erros</th></tr>
-        <tr><td id="total">0</td><td id="acertos">0</td><td id="erros">0</td></tr>
+    <section id="painel">
+      <h2>Rodadas Atuais</h2>
+      <p class="info">Atualizado em tempo real com base no histórico Aviator ElephantBet.</p>
+      <table id="tabela">
+        <thead>
+          <tr>
+            <th>Hora</th>
+            <th>Multiplicador</th>
+            <th>Resultado</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
       </table>
+      <button id="gerar">🔮 Gerar Palpite</button>
+    </section>
 
-      <h3>Histórico de Palpites</h3>
-      <table id="histTable">
-        <tr>
-          <th>#</th>
-          <th>Hora</th>
-          <th>Última Rodada</th>
-          <th>Proteção</th>
-          <th>Cai em</th>
+    <section id="iframe">
+      <h2>Jogo Oficial</h2>
+      <iframe src="https://elephantbet.co.ao/casino/aviator" title="Aviator ElephantBet"></iframe>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Painel Aviator | Desenvolvido para integração ElephantBet</p>
+  </footer>
+
+  <!-- Efeito sonoro -->
+  <audio id="som" preload="auto">
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_8eec0f6c1f.mp3?filename=click-124467.mp3" type="audio/mpeg">
+  </audio>
+
+  <script src="script.js"></script>
+</body>
+</html>          <th>Cai em</th>
           <th>Resultado</th>
         </tr>
       </table>
