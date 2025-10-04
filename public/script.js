@@ -1,40 +1,56 @@
 const botao = document.getElementById("gerar");
 const tabela = document.querySelector("#tabela tbody");
 const som = document.getElementById("som");
+const ultima = document.getElementById("ultima");
+const protecao = document.getElementById("protecao");
+const queda = document.getElementById("queda");
 
-// Função simulada (você pode conectar depois com API ou dados reais)
-function gerarRodada() {
-  const hora = new Date().toLocaleTimeString();
-  const multiplicador = (Math.random() * 20 + 1).toFixed(2) + "x";
-  const cor = parseFloat(multiplicador) > 5 ? "🔥 Alta" : "🧊 Baixa";
-  return { hora, multiplicador, cor };
+const total = document.getElementById("total");
+const acertos = document.getElementById("acertos");
+const erros = document.getElementById("erros");
+
+let contadorTotal = 0;
+let contadorAcertos = 0;
+let contadorErros = 0;
+
+// Função para gerar multiplicador aleatório
+function gerarMultiplicador() {
+  return (Math.random() * 20 + 1).toFixed(2);
 }
 
-// Gera e adiciona nova linha
-function adicionarRodada() {
-  const rodada = gerarRodada();
+// Função principal
+function gerarPalpite() {
+  const hora = new Date().toLocaleTimeString();
+  const ultimoResultado = gerarMultiplicador();
+  const palpiteProtecao = (Math.random() * 2 + 1.5).toFixed(2);
+  const palpiteQueda = (Math.random() * 10 + 3).toFixed(2);
+
+  ultima.textContent = `${ultimoResultado}x`;
+  protecao.textContent = `${palpiteProtecao}x`;
+  queda.textContent = `${palpiteQueda}x`;
+
   const linha = document.createElement("tr");
   linha.innerHTML = `
-    <td>${rodada.hora}</td>
-    <td>${rodada.multiplicador}</td>
-    <td>${rodada.cor}</td>
+    <td>${hora}</td>
+    <td>${ultimoResultado}x</td>
+    <td>Proteção ${palpiteProtecao}x — Cai em ${palpiteQueda}x</td>
+    <td>—</td>
   `;
   tabela.prepend(linha);
 
-  // Toca o som de clique
+  contadorTotal++;
+  total.textContent = contadorTotal;
+
+  // toca o som
   som.currentTime = 0;
   som.play();
 }
 
-// Botão de gerar palpite
-botao.addEventListener("click", adicionarRodada);
+// Gera novo palpite ao clicar
+botao.addEventListener("click", gerarPalpite);
 
-// Atualiza automaticamente a cada 20 segundos (simulação de histórico)
-setInterval(() => {
-  adicionarRodada();
-}, 20000);  document.getElementById("ultimaRodada").innerText = `Última rodada: ${ultima}x`;
-  document.getElementById("resultado").innerText = `Proteção: ${protecao}x | Cai em: ${queda}x`;
-
+// Simulação automática a cada 30 segundos
+setInterval(gerarPalpite, 30000);
   const tabela = document.getElementById("histTable");
   const row = tabela.insertRow(-1);
   row.insertCell(0).innerText = total;
