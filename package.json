@@ -1,0 +1,12 @@
+{
+  "name": "aviatorpalpites",
+  "version": "1.0.0",
+  "description": "Site de palpites Aviator integrado ao ElephantBet",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
