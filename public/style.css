@@ -6,6 +6,17 @@ body {
   margin: 0;
   padding: 0;
   text-align: center;
+  overflow-x: hidden;
+}
+
+/* Animação leve do fundo */
+@keyframes fundoGlow {
+  0% { background: radial-gradient(circle at top, #1a0022 0%, #000 80%); }
+  50% { background: radial-gradient(circle at top, #290036 0%, #000 85%); }
+  100% { background: radial-gradient(circle at top, #1a0022 0%, #000 80%); }
+}
+body {
+  animation: fundoGlow 10s infinite alternate;
 }
 
 /* === CABEÇALHO === */
@@ -13,16 +24,23 @@ header {
   background: linear-gradient(90deg, #9b0dff, #ff0040);
   padding: 20px;
   box-shadow: 0 4px 10px rgba(255, 0, 80, 0.3);
+  animation: brilhoHeader 4s infinite alternate;
+}
+
+@keyframes brilhoHeader {
+  from { box-shadow: 0 0 10px rgba(255,0,150,0.3); }
+  to { box-shadow: 0 0 25px rgba(255,0,200,0.7); }
 }
 
 header h1 {
-  font-size: 1.8em;
+  font-size: 1.9em;
   margin-bottom: 5px;
+  text-shadow: 0 0 15px #fff, 0 0 25px #ff33cc;
 }
 
 header p {
   font-size: 1em;
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
 /* === SEÇÕES === */
@@ -37,11 +55,22 @@ section {
   border-radius: 15px;
   box-shadow: 0 0 15px rgba(255, 0, 120, 0.3);
   max-width: 900px;
+  transition: transform 0.3s ease;
+}
+
+section:hover {
+  transform: scale(1.01);
 }
 
 h2 {
   color: #ff3388;
-  text-shadow: 0 0 10px #9b0dff;
+  text-shadow: 0 0 10px #9b0dff, 0 0 20px #ff0040;
+  animation: piscarTitulo 2.5s infinite alternate;
+}
+
+@keyframes piscarTitulo {
+  from { opacity: 0.8; text-shadow: 0 0 10px #9b0dff; }
+  to { opacity: 1; text-shadow: 0 0 25px #ff33cc; }
 }
 
 /* === BOTÕES === */
@@ -57,11 +86,17 @@ button {
   cursor: pointer;
   transition: 0.3s;
   box-shadow: 0 0 10px rgba(255, 0, 120, 0.5);
+  animation: pulsarBotao 2s infinite alternate;
+}
+
+@keyframes pulsarBotao {
+  from { transform: scale(1); box-shadow: 0 0 10px rgba(255,0,180,0.6); }
+  to { transform: scale(1.05); box-shadow: 0 0 25px rgba(255,0,255,0.8); }
 }
 
 button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(255, 0, 200, 0.8);
+  transform: scale(1.08);
+  box-shadow: 0 0 30px rgba(255, 0, 200, 0.9);
 }
 
 /* === TABELAS === */
@@ -111,10 +146,13 @@ footer {
   color: #bbb;
   border-top: 2px solid #9b0dff;
   text-shadow: 0 0 8px #9b0dff;
-  }button:hover {
-  background: #ff5c6c;
+  animation: brilhoFooter 4s infinite alternate;
 }
 
+@keyframes brilhoFooter {
+  from { text-shadow: 0 0 8px #9b0dff; }
+  to { text-shadow: 0 0 20px #ff0040; }
+  }
 iframe {
   margin-top: 20px;
   border-radius: 10px;
