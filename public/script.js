@@ -1,40 +1,38 @@
-let total = 0, acertos = 0, erros = 0;
+const botao = document.getElementById("gerar");
+const tabela = document.querySelector("#tabela tbody");
+const som = document.getElementById("som");
 
-function aleatorio(min, max) {
-  return (Math.random() * (max - min) + min).toFixed(2);
+// Função simulada (você pode conectar depois com API ou dados reais)
+function gerarRodada() {
+  const hora = new Date().toLocaleTimeString();
+  const multiplicador = (Math.random() * 20 + 1).toFixed(2) + "x";
+  const cor = parseFloat(multiplicador) > 5 ? "🔥 Alta" : "🧊 Baixa";
+  return { hora, multiplicador, cor };
 }
 
-function gerarPalpite() {
-  const now = new Date();
-  const hora = now.toLocaleTimeString();
+// Gera e adiciona nova linha
+function adicionarRodada() {
+  const rodada = gerarRodada();
+  const linha = document.createElement("tr");
+  linha.innerHTML = `
+    <td>${rodada.hora}</td>
+    <td>${rodada.multiplicador}</td>
+    <td>${rodada.cor}</td>
+  `;
+  tabela.prepend(linha);
 
-  // simular última rodada
-  const ultima = aleatorio(1, 15);
+  // Toca o som de clique
+  som.currentTime = 0;
+  som.play();
+}
 
-  // lógica de proteção e alvo
-  let protecao, queda;
-  if (ultima < 2) {
-    protecao = aleatorio(2, 3);
-    queda = aleatorio(6, 10);
-  } else if (ultima < 5) {
-    protecao = aleatorio(2, 2.8);
-    queda = aleatorio(4, 7);
-  } else {
-    protecao = aleatorio(1.5, 2.3);
-    queda = aleatorio(2.5, 4.5);
-  }
+// Botão de gerar palpite
+botao.addEventListener("click", adicionarRodada);
 
-  // gerar probabilidade de acerto simulado
-  const acertou = Math.random() > 0.5;
-
-  total++;
-  if (acertou) acertos++; else erros++;
-
-  document.getElementById("total").innerText = total;
-  document.getElementById("acertos").innerText = acertos;
-  document.getElementById("erros").innerText = erros;
-
-  document.getElementById("ultimaRodada").innerText = `Última rodada: ${ultima}x`;
+// Atualiza automaticamente a cada 20 segundos (simulação de histórico)
+setInterval(() => {
+  adicionarRodada();
+}, 20000);  document.getElementById("ultimaRodada").innerText = `Última rodada: ${ultima}x`;
   document.getElementById("resultado").innerText = `Proteção: ${protecao}x | Cai em: ${queda}x`;
 
   const tabela = document.getElementById("histTable");
