@@ -47,3 +47,27 @@ function gerarPalpite() {
   document.getElementById("acertos").innerText = acertos;
   document.getElementById("erros").innerText = erros;
 }
+
+#estatisticas {
+  margin: 20px auto;
+  border-collapse: collapse;
+  width: 80%;
+  color: #f1f1f1;
+  background: #1d3557;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+#estatisticas th, #estatisticas td {
+  border: 1px solid #457b9d;
+  padding: 10px;
+}
+
+#estatisticas th {
+  background: #e63946;
+}
+
+.info {
+  font-size: 18px;
+  margin: 10px 0;
+  }
