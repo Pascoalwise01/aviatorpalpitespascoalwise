@@ -13,9 +13,10 @@
   </header>
 
   <main>
+    <!-- ==================== HISTÓRICO ==================== -->
     <section id="historico">
       <h2>📊 Histórico de Rodadas</h2>
-      <p class="info">Últimas rodadas capturadas automaticamente com base na análise do Aviator.</p>
+      <p class="info">Últimas rodadas geradas com base na análise lógica do jogo.</p>
       <table id="tabela">
         <thead>
           <tr>
@@ -29,12 +30,49 @@
       </table>
     </section>
 
+    <!-- ==================== PAINEL DE PALPITE ==================== -->
     <section id="palpite">
       <h2>🔮 Gerar Palpite Automático</h2>
-      <p>Com base nas rodadas anteriores, gere um palpite lógico:</p>
+      <p>Com base nas últimas rodadas, gere um palpite lógico com proteção e valor de queda.</p>
+
       <button id="gerar">Gerar Palpite</button>
 
       <div id="resultado" class="resultado">
+        <p><strong>Última rodada:</strong> <span id="ultima">—</span></p>
+        <p><strong>Proteção:</strong> <span id="protecao">—</span></p>
+        <p><strong>Cai em:</strong> <span id="queda">—</span></p>
+      </div>
+    </section>
+
+    <!-- ==================== ESTATÍSTICAS ==================== -->
+    <section id="estatisticas">
+      <h2>📈 Estatísticas</h2>
+      <table>
+        <tr><td>Palpites Gerados:</td><td id="total">0</td></tr>
+        <tr><td>Acertos:</td><td id="acertos">0</td></tr>
+        <tr><td>Erros:</td><td id="erros">0</td></tr>
+      </table>
+    </section>
+
+    <!-- ==================== JOGO AO VIVO ==================== -->
+    <section id="iframe">
+      <h2>🎮 Jogar Aviator</h2>
+      <iframe src="https://elephantbet.co.ao/casino/aviator" title="Aviator ElephantBet"></iframe>
+    </section>
+  </main>
+
+  <!-- ==================== RODAPÉ ==================== -->
+  <footer>
+    <p>© 2025 Aviator Palpites Pascoal Wise — Integrado com ElephantBet</p>
+  </footer>
+
+  <!-- ==================== SOM ==================== -->
+  <audio id="som" preload="auto">
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_8eec0f6c1f.mp3?filename=click-124467.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- ==================== SCRIPT ==================== -->
+  <script src="script.js      <div id="resultado" class="resultado">
         <p><strong>Última rodada:</strong> <span id="ultima"></span></p>
         <p><strong>Proteção:</strong> <span id="protecao"></span></p>
         <p><strong>Cai em:</strong> <span id="queda"></span></p>
