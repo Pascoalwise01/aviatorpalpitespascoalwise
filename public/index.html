@@ -16,10 +16,26 @@
   <main>
     <!-- Área de palpites -->
     <section id="palpites">
-      <h2>Palpite Atual</h2>
-      <div id="resultado">Clique em "Gerar Palpite"</div>
-      <button onclick="gerarPalpite()">Gerar Palpite</button>
-    </section>
+  <h2>Palpite Automático</h2>
+
+  <div id="ultimaRodada" class="info">Última rodada: --</div>
+  <div id="resultado" class="info">Clique em "Gerar Palpite" para começar</div>
+
+  <button onclick="gerarPalpite()">Gerar Palpite</button>
+
+  <table id="estatisticas">
+    <tr>
+      <th>Palpites Gerados</th>
+      <th>Acertos</th>
+      <th>Erros</th>
+    </tr>
+    <tr>
+      <td id="total">0</td>
+      <td id="acertos">0</td>
+      <td id="erros">0</td>
+    </tr>
+  </table>
+</section>
 
     <!-- Aviator integrado -->
 <section id="aviator">
