@@ -1,40 +1,86 @@
-// script.js — versão corrigida, robusta e com localStorage
+// Seletores dos elementos HTML
+const gerarBtn = document.getElementById("gerar");
+const ultimaSpan = document.getElementById("ultima");
+const protecaoSpan = document.getElementById("protecao");
+const quedaSpan = document.getElementById("queda");
+const tabelaBody = document.querySelector("#tabela tbody");
+const totalEl = document.getElementById("total");
+const acertosEl = document.getElementById("acertos");
+const errosEl = document.getElementById("erros");
+const som = document.getElementById("som");
 
-document.addEventListener('DOMContentLoaded', () => {
-  // --- elementos DOM (verificações) ---
-  const botao = document.getElementById('gerar');
-  const tabelaBody = (document.querySelector('#tabela tbody')
-                      || (document.getElementById('tabela') && document.getElementById('tabela').querySelector('tbody'))
-                      || null);
-  const som = document.getElementById('som');
-  const ultimaEl = document.getElementById('ultima');
-  const protecaoEl = document.getElementById('protecao');
-  const quedaEl = document.getElementById('queda');
-  const totalEl = document.getElementById('total');
-  const acertosEl = document.getElementById('acertos');
-  const errosEl = document.getElementById('erros');
+// Estatísticas
+let totalPalpites = 0;
+let acertos = 0;
+let erros = 0;
 
-  // checar elementos essenciais e avisar (ajuda a descobrir problemas rapidamente)
-  const missing = [];
-  if (!botao) missing.push('botão #gerar');
-  if (!tabelaBody) missing.push('tabela #tabela > tbody');
-  if (!ultimaEl) missing.push('span #ultima');
-  if (!protecaoEl) missing.push('span #protecao');
-  if (!quedaEl) missing.push('span #queda');
-  if (!totalEl) missing.push('#total');
-  if (!acertosEl) missing.push('#acertos');
-  if (!errosEl) missing.push('#erros');
+// Gera hora atual formatada
+function horaAtual() {
+  const agora = new Date();
+  return agora.toLocaleTimeString("pt-BR", { hour12: false });
+}
 
-  if (missing.length) {
-    const msg = 'Erro: elementos faltando no HTML: ' + missing.join(', ') +
-      '. Verifica ids no index.html (veja instruções no suporte).';
-    console.error(msg);
-    // Mostrar alerta visível no ecrã (útil em mobile)
-    alert(msg);
-    return;
+// Função para gerar número aleatório (com 2 casas decimais)
+function gerarNumero(min, max) {
+  return (Math.random() * (max - min) + min).toFixed(2);
+}
+
+// Simula o último resultado (exemplo baseado no Aviator)
+function gerarUltimoResultado() {
+  const valor = gerarNumero(1.00, 50.00);
+  return valor + "x";
+}
+
+// Função principal de geração do palpite
+function gerarPalpite() {
+  som.play();
+
+  // Última rodada simulada
+  const ultimo = gerarUltimoResultado();
+
+  // Gera proteção (entre 1.50x e 3.00x)
+  const protecao = gerarNumero(1.50, 3.00);
+
+  // Gera o valor em que o voo pode cair (entre 3x e 15x)
+  const queda = gerarNumero(3.00, 15.00);
+
+  // Mostra no painel principal
+  ultimaSpan.textContent = ultimo;
+  protecaoSpan.textContent = `${protecao}x`;
+  quedaSpan.textContent = `${queda}x`;
+
+  // Atualiza tabela
+  const novaLinha = document.createElement("tr");
+  novaLinha.innerHTML = `
+    <td>${horaAtual()}</td>
+    <td>${ultimo}</td>
+    <td>Proteção ${protecao}x → Cai em ${queda}x</td>
+    <td>—</td>
+  `;
+  tabelaBody.prepend(novaLinha);
+
+  // Atualiza estatísticas
+  totalPalpites++;
+  totalEl.textContent = totalPalpites;
+
+  // Lógica aleatória (simulação de acerto/erro)
+  const acertou = Math.random() > 0.5;
+  if (acertou) {
+    acertos++;
+    novaLinha.lastElementChild.textContent = "✅ Acertou";
+    novaLinha.lastElementChild.classList.add("acerto");
+  } else {
+    erros++;
+    novaLinha.lastElementChild.textContent = "❌ Errou";
+    novaLinha.lastElementChild.classList.add("erro");
   }
 
-  // --- estado (com persistência local) ---
+  acertosEl.textContent = acertos;
+  errosEl.textContent = erros;
+}
+
+// Evento de clique no botão
+gerarBtn.addEventListener("click", gerarPalpite);  // --- estado (com persistência local) ---
   const STORAGE_KEY = 'aviatorpalpites_state_v1';
   let state = {
     total: 0,
