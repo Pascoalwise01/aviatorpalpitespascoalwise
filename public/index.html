@@ -1,22 +1,51 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Aviator Palpites Pascoal Wise</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <h1>✈️ Aviator Palpites <span class="highlight">Pascoal Wise</span></h1>
-    <p>Previsões e Estatísticas baseadas no comportamento do Aviator da ElephantBet</p>
+    <h1>✈️ Aviator Palpites Pascoal Wise</h1>
+    <p>Previsões lógicas com base nas últimas rodadas</p>
   </header>
 
   <main>
-    <!-- ==================== HISTÓRICO ==================== -->
-    <section id="historico">
-      <h2>📊 Histórico de Rodadas</h2>
-      <p class="info">Últimas rodadas geradas com base na análise lógica do jogo.</p>
+    <!-- Seção do jogo Aviator -->
+    <section id="jogo">
+      <h2>🎮 Jogo Aviator (ElephantBet)</h2>
+      <iframe
+        src="https://elephantbet.co.ao/casino/aviator"
+        width="100%"
+        height="500"
+        frameborder="0"
+        allowfullscreen>
+      </iframe>
+    </section>
+
+    <!-- Seção de palpites automáticos -->
+    <section id="palpites">
+      <h2>🎯 Palpites Automáticos</h2>
+
+      <div class="painel">
+        <p><strong>Última rodada:</strong> <span id="ultima">--</span></p>
+        <p><strong>Proteção:</strong> <span id="protecao">--</span></p>
+        <p><strong>Cai em:</strong> <span id="queda">--</span></p>
+        <button id="gerar">Gerar Palpite</button>
+      </div>
+
+      <audio id="som" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7ba8b4f983.mp3?filename=click-button-140881.mp3"></audio>
+
+      <h3>📊 Estatísticas</h3>
+      <div class="stats">
+        <p>Total: <span id="total">0</span></p>
+        <p>Acertos: <span id="acertos">0</span></p>
+        <p>Erros: <span id="erros">0</span></p>
+      </div>
+
+      <h3>📋 Histórico</h3>
       <table id="tabela">
         <thead>
           <tr>
@@ -29,12 +58,15 @@
         <tbody></tbody>
       </table>
     </section>
+  </main>
 
-    <!-- ==================== PAINEL DE PALPITE ==================== -->
-    <section id="palpite">
-      <h2>🔮 Gerar Palpite Automático</h2>
-      <p>Com base nas últimas rodadas, gere um palpite lógico com proteção e valor de queda.</p>
+  <footer>
+    <p>© 2025 Aviator Palpites Pascoal Wise — Made by Pascoal Wise</p>
+  </footer>
 
+  <script src="script.js"></script>
+</body>
+</html>
       <button id="gerar">Gerar Palpite</button>
 
       <div id="resultado" class="resultado">
