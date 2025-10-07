@@ -102,7 +102,6 @@ function desenharGrafico() {
     ctx.fillRect(i * larguraBarra, canvas.height - 40, larguraBarra - 4, 40);
   });
 
-  // linha de base
   ctx.strokeStyle = "rgba(255,255,255,0.2)";
   ctx.beginPath();
   ctx.moveTo(0, canvas.height - 1);
@@ -113,5 +112,15 @@ function desenharGrafico() {
 // === TAXA DE ACERTO ===
 function atualizarTaxa() {
   const taxa = total > 0 ? ((acertos / total) * 100).toFixed(1) : 0;
-  document.getElementById("taxaAcerto").innerText = `Taxa de acerto: ${taxa}%`;
-}
+  const elemento = document.getElementById("taxaAcerto");
+
+  elemento.innerText = `Taxa de acerto: ${taxa}%`;
+
+  if (taxa >= 60) {
+    elemento.style.color = "#00ff80"; // verde
+  } else if (taxa >= 30) {
+    elemento.style.color = "#ffcc00"; // amarelo
+  } else {
+    elemento.style.color = "#ff3366"; // vermelho
+  }
+    }
