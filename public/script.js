@@ -1,132 +1,164 @@
 // === VARIÁVEIS GLOBAIS ===
-let limiteRodadas = 20;
+let historico = [];
 let total = 0;
 let acertos = 0;
 let erros = 0;
-let historico = [];
-let fatorAjuste = 1.0;
+let limiteRodadas = 20; // padrão
+let graficoCtx;
 
-// === GERAR PALPITE AUTOMÁTICO ===
+// === FUNÇÃO PRINCIPAL ===
 function gerarPalpite() {
-  const ultimaRodada = (Math.random() * 10 + 1).toFixed(2);
-  const protecao = (Math.random() * 2 + 1.5 * fatorAjuste).toFixed(2);
-  const alvo = (parseFloat(protecao) + Math.random() * 6 * fatorAjuste).toFixed(2);
-  const hora = new Date().toLocaleTimeString();
+  const resultadoDiv = document.getElementById("resultado");
+  const ultimaRodadaDiv = document.getElementById("ultimaRodada");
 
-  document.getElementById('ultimaRodada').innerText = `Última rodada: ${ultimaRodada}x`;
-  document.getElementById('resultado').innerHTML = `
-    <strong>Proteção:</strong> ${protecao}x | 
-    <strong>Cai em:</strong> ${alvo}x
-    <br><br>
-    <button onclick="registrarResultado('acertou', '${ultimaRodada}', '${protecao}', '${alvo}', '${hora}')">✅ Acertou</button>
-    <button onclick="registrarResultado('errou', '${ultimaRodada}', '${protecao}', '${alvo}', '${hora}')">❌ Errou</button>
-  `;
+  // Gera um número aleatório entre 1.00x e 20.00x
+  const palpite = (Math.random() * 19 + 1).toFixed(2) + "x";
+
+  const hora = new Date().toLocaleTimeString("pt-PT", { hour12: false });
+  const rodada = Math.floor(Math.random() * 9999);
 
   total++;
-  document.getElementById('total').innerText = total;
-}
 
-// === REGISTRAR RESULTADO ===
-function registrarResultado(status, ultimaRodada, protecao, alvo, hora) {
-  let resultadoTexto = "";
+  ultimaRodadaDiv.textContent = `Última rodada: ${rodada}`;
+  resultadoDiv.innerHTML = `🎯 <strong>Palpite:</strong> ${palpite}`;
 
-  if (status === "acertou") {
-    acertos++;
-    document.getElementById("acertos").innerText = acertos;
-    resultadoTexto = "✅ Acerto";
-    ajustarFator(true);
-  } else {
-    const real = prompt("Digite o valor real onde o Aviator parou (ex: 3.75):");
-    erros++;
-    document.getElementById("erros").innerText = erros;
-    resultadoTexto = `❌ Erro (real: ${real}x)`;
-    ajustarFator(false, parseFloat(real), parseFloat(alvo));
-  }
+  // Adiciona ao histórico
+  const novaRodada = {
+    id: total,
+    hora,
+    rodada,
+    protecao: definirProtecao(palpite),
+    caiEm: palpite,
+    resultado: "—",
+  };
 
-  adicionarHistorico(hora, ultimaRodada, protecao, alvo, resultadoTexto, status);
-  atualizarTaxa();
-  document.getElementById("resultado").innerText = "Palpite registrado. Gere o próximo!";
-}
+  historico.unshift(novaRodada);
+  if (historico.length > limiteRodadas) historico.pop();
 
-// === AJUSTE LÓGICO ===
-function ajustarFator(acertou, real = null, alvo = null) {
-  if (acertou) {
-    fatorAjuste += 0.02;
-  } else if (real && alvo) {
-    if (real < alvo) fatorAjuste -= 0.05;
-    else fatorAjuste += 0.05;
-  }
-
-  if (fatorAjuste < 0.5) fatorAjuste = 0.5;
-  if (fatorAjuste > 2.0) fatorAjuste = 2.0;
-}
-
-// === HISTÓRICO + GRÁFICO ===
-function adicionarHistorico(hora, ultimaRodada, protecao, alvo, resultado, status) {
-  historico.push({ hora, ultimaRodada, protecao, alvo, resultado, status });
-  if (historico.length > 20) historico.shift();
-
-  const tabela = document.getElementById("histTable");
-  tabela.innerHTML = `
-    <tr>
-      <th>#</th>
-      <th>Hora</th>
-      <th>Última Rodada</th>
-      <th>Proteção</th>
-      <th>Cai em</th>
-      <th>Resultado</th>
-    </tr>
-  `;
-
-  historico.forEach((item, i) => {
-    const linha = tabela.insertRow(-1);
-    linha.insertCell(0).innerText = i + 1;
-    linha.insertCell(1).innerText = item.hora;
-    linha.insertCell(2).innerText = `${item.ultimaRodada}x`;
-    linha.insertCell(3).innerText = `${item.protecao}x`;
-    linha.insertCell(4).innerText = `${item.alvo}x`;
-    linha.insertCell(5).innerText = item.resultado;
-  });
-
+  atualizarTabela();
   desenharGrafico();
+
+  // Solicitar confirmação do utilizador
+  setTimeout(() => {
+    confirmarResultado(total);
+  }, 1000);
 }
 
-// === GRÁFICO VISUAL ===
-function desenharGrafico() {
-  const canvas = document.getElementById("graficoResultados");
-  const ctx = canvas.getContext("2d");
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+// === FUNÇÃO: DEFINIR PROTEÇÃO ===
+function definirProtecao(palpite) {
+  const valor = parseFloat(palpite);
+  if (valor < 1.5) return "🟢 Baixa";
+  if (valor < 3) return "🟡 Média";
+  return "🔴 Alta";
+}
 
-  const larguraBarra = canvas.width / 20;
-  historico.forEach((item, i) => {
-    ctx.fillStyle = item.status === "acertou" ? "#00ff80" : "#ff3366";
-    ctx.fillRect(i * larguraBarra, canvas.height - 40, larguraBarra - 4, 40);
+// === CONFIRMAÇÃO DO UTILIZADOR ===
+function confirmarResultado(idRodada) {
+  const rodada = historico.find((r) => r.id === idRodada);
+  if (!rodada) return;
+
+  const resposta = confirm(`O palpite ${rodada.caiEm} foi CERTO? (OK = sim, Cancelar = não)`);
+
+  if (resposta) {
+    rodada.resultado = "✅ Certo";
+    acertos++;
+  } else {
+    rodada.resultado = "❌ Errado";
+
+    // Pedir o valor real que saiu
+    const real = prompt("Qual foi o valor real (ex: 2.30x)?");
+    if (real) rodada.caiEm = real;
+
+    erros++;
+  }
+
+  atualizarTabela();
+  desenharGrafico();
+  atualizarEstatisticas();
+}
+
+// === ATUALIZAÇÃO DA TABELA ===
+function atualizarTabela() {
+  const tabela = document.getElementById("histTable");
+  const linhas = tabela.querySelectorAll("tr:not(:first-child)");
+  linhas.forEach((l) => l.remove());
+
+  historico.forEach((rodada) => {
+    const linha = document.createElement("tr");
+    linha.innerHTML = `
+      <td>${rodada.id}</td>
+      <td>${rodada.hora}</td>
+      <td>${rodada.rodada}</td>
+      <td>${rodada.protecao}</td>
+      <td>${rodada.caiEm}</td>
+      <td>${rodada.resultado}</td>
+    `;
+    tabela.appendChild(linha);
   });
 
-  ctx.strokeStyle = "rgba(255,255,255,0.2)";
-  ctx.beginPath();
-  ctx.moveTo(0, canvas.height - 1);
-  ctx.lineTo(canvas.width, canvas.height - 1);
-  ctx.stroke();
+  atualizarEstatisticas();
 }
 
-// === TAXA DE ACERTO ===
-function atualizarTaxa() {
+// === ESTATÍSTICAS ===
+function atualizarEstatisticas() {
+  document.getElementById("total").textContent = total;
+  document.getElementById("acertos").textContent = acertos;
+  document.getElementById("erros").textContent = erros;
+
   const taxa = total > 0 ? ((acertos / total) * 100).toFixed(1) : 0;
-  const elemento = document.getElementById("taxaAcerto");
+  document.getElementById("taxaAcerto").textContent = `Taxa de acerto: ${taxa}%`;
+}
 
-  elemento.innerText = `Taxa de acerto: ${taxa}%`;
+// === GRÁFICO ===
+function desenharGrafico() {
+  if (!graficoCtx) {
+    graficoCtx = document.getElementById("graficoResultados").getContext("2d");
+  }
 
-  if (taxa >= 60) {
-    elemento.style.color = "#00ff80"; // verde
-  } else if (taxa >= 30) {
-    elemento.style.color = "#ffcc00"; // amarelo
-  } else {
-    elemento.style.color = "#ff3366"; // vermelho
-    function atualizarLimite() {
+  const largura = graficoCtx.canvas.width;
+  const altura = graficoCtx.canvas.height;
+
+  graficoCtx.clearRect(0, 0, largura, altura);
+
+  const passo = largura / limiteRodadas;
+  const base = altura - 10;
+
+  historico.forEach((rodada, i) => {
+    const x = largura - i * passo - passo / 2;
+    const y = base - parseFloat(rodada.caiEm) * 4; // escala simples
+
+    const cor = rodada.resultado === "✅ Certo" ? "#00ff80" :
+                rodada.resultado === "❌ Errado" ? "#ff0040" :
+                "#888";
+
+    graficoCtx.beginPath();
+    graficoCtx.arc(x, y, 4, 0, Math.PI * 2);
+    graficoCtx.fillStyle = cor;
+    graficoCtx.fill();
+  });
+}
+
+// === ATUALIZAR LIMITE (chamado pelo index) ===
+function atualizarLimite() {
   const select = document.getElementById("limiteRodadas");
   limiteRodadas = parseInt(select.value);
-  console.log(`Limite de rodadas ajustado para: ${limiteRodadas}`);
-    }
+  if (historico.length > limiteRodadas) {
+    historico = historico.slice(0, limiteRodadas);
+    atualizarTabela();
+    desenharGrafico();
   }
-    }
+  console.log("Limite de rodadas ajustado para:", limiteRodadas);
+}
+
+// === LIMPAR HISTÓRICO AUTOMATICAMENTE (quando chega ao limite) ===
+function verificarLimite() {
+  if (historico.length >= limiteRodadas) {
+    historico = [];
+    total = acertos = erros = 0;
+    atualizarTabela();
+    desenharGrafico();
+  }
+}
+
+// === EXECUTAR VERIFICAÇÃO PERIÓDICA ===
+setInterval(verificarLimite, 30000); // a cada 30 segundos
