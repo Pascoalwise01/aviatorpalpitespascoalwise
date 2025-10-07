@@ -1,106 +1,47 @@
+/* === ESTILO GERAL === */
 body {
-  margin: 0;
   font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #0a0014, #1a001f);
+  background: radial-gradient(circle at top, #1a0022 0%, #000 80%);
   color: #fff;
-}
-
-header {
+  margin: 0;
+  padding: 0;
   text-align: center;
+}
+
+/* === CABEÇALHO === */
+header {
+  background: linear-gradient(90deg, #9b0dff, #ff0040);
   padding: 20px;
-  background: radial-gradient(circle, #2a002a, #0a0014);
-  box-shadow: 0 0 20px #ff0040;
+  box-shadow: 0 4px 10px rgba(255, 0, 80, 0.3);
 }
 
-h1 {
-  color: #ff0040;
-  text-shadow: 0 0 15px #a000ff;
+header h1 {
+  font-size: 1.8em;
+  margin-bottom: 5px;
 }
 
-.highlight {
-  color: #a000ff;
+header p {
+  font-size: 1em;
+  opacity: 0.8;
 }
 
+/* === SEÇÕES === */
 main {
-  max-width: 1000px;
-  margin: 20px auto;
-  padding: 10px;
+  padding: 20px;
 }
 
 section {
-  margin: 20px 0;
-  background: rgba(255,255,255,0.05);
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 0 10px #a000ff;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th, td {
-  padding: 10px;
-  border-bottom: 1px solid rgba(255,255,255,0.2);
-  text-align: center;
-}
-
-button {
-  display: block;
-  margin: 10px auto;
-  padding: 12px 25px;
-  background: linear-gradient(90deg, #ff0040, #a000ff);
-  border: none;
-  border-radius: 10px;
-  color: white;
-  font-weight: bold;
-  font-size: 16px;
-  cursor: pointer;
-  box-shadow: 0 0 15px #a000ff;
-  transition: all 0.2s ease;
-}
-
-button:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 30px #ff0040;
-}
-
-iframe {
-  width: 100%;
-  height: 500px;
-  border: none;
-  border-radius: 12px;
-}
-
-footer {
-  text-align: center;
-  padding: 15px;
-  background: #0a0014;
-  color: #aaa;
-  font-size: 14px;
-}  margin: 30px auto;
+  margin: 30px auto;
   padding: 20px;
   background: rgba(40, 0, 60, 0.5);
   border-radius: 15px;
   box-shadow: 0 0 15px rgba(255, 0, 120, 0.3);
   max-width: 900px;
-  transition: transform 0.3s ease;
-}
-
-section:hover {
-  transform: scale(1.01);
 }
 
 h2 {
   color: #ff3388;
-  text-shadow: 0 0 10px #9b0dff, 0 0 20px #ff0040;
-  animation: piscarTitulo 2.5s infinite alternate;
-}
-
-@keyframes piscarTitulo {
-  from { opacity: 0.8; text-shadow: 0 0 10px #9b0dff; }
-  to { opacity: 1; text-shadow: 0 0 25px #ff33cc; }
+  text-shadow: 0 0 10px #9b0dff;
 }
 
 /* === BOTÕES === */
@@ -116,17 +57,11 @@ button {
   cursor: pointer;
   transition: 0.3s;
   box-shadow: 0 0 10px rgba(255, 0, 120, 0.5);
-  animation: pulsarBotao 2s infinite alternate;
-}
-
-@keyframes pulsarBotao {
-  from { transform: scale(1); box-shadow: 0 0 10px rgba(255,0,180,0.6); }
-  to { transform: scale(1.05); box-shadow: 0 0 25px rgba(255,0,255,0.8); }
 }
 
 button:hover {
-  transform: scale(1.08);
-  box-shadow: 0 0 30px rgba(255, 0, 200, 0.9);
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(255, 0, 200, 0.8);
 }
 
 /* === TABELAS === */
@@ -176,21 +111,4 @@ footer {
   color: #bbb;
   border-top: 2px solid #9b0dff;
   text-shadow: 0 0 8px #9b0dff;
-  animation: brilhoFooter 4s infinite alternate;
-}
-
-@keyframes brilhoFooter {
-  from { text-shadow: 0 0 8px #9b0dff; }
-  to { text-shadow: 0 0 20px #ff0040; }
-  }
-iframe {
-  margin-top: 20px;
-  border-radius: 10px;
-}
-
-iframe {
-  width: 100%;
-  height: 75vh; /* ocupa 75% da altura da tela */
-  border-radius: 12px;
-  border: none;
 }
