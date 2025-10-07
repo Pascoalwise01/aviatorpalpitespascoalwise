@@ -1,4 +1,4 @@
-        let total = 0, acertos = 0, erros = 0;
+let total = 0, acertos = 0, erros = 0;
 
 function aleatorio(min, max) {
   return (Math.random() * (max - min) + min).toFixed(2);
