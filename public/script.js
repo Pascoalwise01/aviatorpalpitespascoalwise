@@ -1,33 +1,71 @@
-let historico = JSON.parse(localStorage.getItem('historico')) || [];
-let total = 0, acertos = 0, erros = 0;
+// === VARIÁVEIS GLOBAIS ===
+let total = 0;
+let acertos = 0;
+let erros = 0;
+let historico = [];
+let fatorAjuste = 1.0;
 
+// === GERAR PALPITE AUTOMÁTICO ===
 function gerarPalpite() {
-  const ultimaRodada = (Math.random() * 10).toFixed(2);
-  const protecao = (Math.random() * 2 + 1).toFixed(2);
-  const caiEm = (Math.random() * 10 + 1).toFixed(2);
-  const resultado = Math.random() > 0.5 ? 'Acerto ✅' : 'Erro ❌';
+  const ultimaRodada = (Math.random() * 10 + 1).toFixed(2);
+  const protecao = (Math.random() * 2 + 1.5 * fatorAjuste).toFixed(2);
+  const alvo = (parseFloat(protecao) + Math.random() * 6 * fatorAjuste).toFixed(2);
   const hora = new Date().toLocaleTimeString();
 
-  const novo = { hora, ultimaRodada, protecao, caiEm, resultado };
-  historico.unshift(novo);
+  document.getElementById('ultimaRodada').innerText = `Última rodada: ${ultimaRodada}x`;
+  document.getElementById('resultado').innerHTML = `
+    <strong>Proteção:</strong> ${protecao}x | 
+    <strong>Cai em:</strong> ${alvo}x
+    <br><br>
+    <button onclick="registrarResultado('acertou', '${ultimaRodada}', '${protecao}', '${alvo}', '${hora}')">✅ Acertou</button>
+    <button onclick="registrarResultado('errou', '${ultimaRodada}', '${protecao}', '${alvo}', '${hora}')">❌ Errou</button>
+  `;
 
-  if (resultado.includes('Acerto')) acertos++;
-  else erros++;
   total++;
-
-  atualizarEstatisticas();
-  renderHistorico();
-  salvarHistorico();
+  document.getElementById('total').innerText = total;
 }
 
-function atualizarEstatisticas() {
-  document.getElementById('total').textContent = total;
-  document.getElementById('acertos').textContent = acertos;
-  document.getElementById('erros').textContent = erros;
+// === REGISTRAR RESULTADO ===
+function registrarResultado(status, ultimaRodada, protecao, alvo, hora) {
+  let resultadoTexto = "";
+
+  if (status === "acertou") {
+    acertos++;
+    document.getElementById("acertos").innerText = acertos;
+    resultadoTexto = "✅ Acerto";
+    ajustarFator(true);
+  } else {
+    const real = prompt("Digite o valor real onde o Aviator parou (ex: 3.75):");
+    erros++;
+    document.getElementById("erros").innerText = erros;
+    resultadoTexto = `❌ Erro (real: ${real}x)`;
+    ajustarFator(false, parseFloat(real), parseFloat(alvo));
+  }
+
+  adicionarHistorico(hora, ultimaRodada, protecao, alvo, resultadoTexto, status);
+  atualizarTaxa();
+  document.getElementById("resultado").innerText = "Palpite registrado. Gere o próximo!";
 }
 
-function renderHistorico() {
-  const tabela = document.getElementById('histTable');
+// === AJUSTE LÓGICO ===
+function ajustarFator(acertou, real = null, alvo = null) {
+  if (acertou) {
+    fatorAjuste += 0.02;
+  } else if (real && alvo) {
+    if (real < alvo) fatorAjuste -= 0.05;
+    else fatorAjuste += 0.05;
+  }
+
+  if (fatorAjuste < 0.5) fatorAjuste = 0.5;
+  if (fatorAjuste > 2.0) fatorAjuste = 2.0;
+}
+
+// === HISTÓRICO + GRÁFICO ===
+function adicionarHistorico(hora, ultimaRodada, protecao, alvo, resultado, status) {
+  historico.push({ hora, ultimaRodada, protecao, alvo, resultado, status });
+  if (historico.length > 20) historico.shift();
+
+  const tabela = document.getElementById("histTable");
   tabela.innerHTML = `
     <tr>
       <th>#</th>
@@ -38,41 +76,42 @@ function renderHistorico() {
       <th>Resultado</th>
     </tr>
   `;
-  historico.slice(0, 15).forEach((item, i) => {
-    tabela.innerHTML += `
-      <tr>
-        <td>${i + 1}</td>
-        <td>${item.hora}</td>
-        <td>${item.ultimaRodada}</td>
-        <td>${item.protecao}</td>
-        <td>${item.caiEm}</td>
-        <td>${item.resultado}</td>
-      </tr>
-    `;
+
+  historico.forEach((item, i) => {
+    const linha = tabela.insertRow(-1);
+    linha.insertCell(0).innerText = i + 1;
+    linha.insertCell(1).innerText = item.hora;
+    linha.insertCell(2).innerText = `${item.ultimaRodada}x`;
+    linha.insertCell(3).innerText = `${item.protecao}x`;
+    linha.insertCell(4).innerText = `${item.alvo}x`;
+    linha.insertCell(5).innerText = item.resultado;
   });
+
+  desenharGrafico();
 }
 
-function salvarHistorico() {
-  localStorage.setItem('historico', JSON.stringify(historico));
+// === GRÁFICO VISUAL ===
+function desenharGrafico() {
+  const canvas = document.getElementById("graficoResultados");
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  const larguraBarra = canvas.width / 20;
+  historico.forEach((item, i) => {
+    ctx.fillStyle = item.status === "acertou" ? "#00ff80" : "#ff3366";
+    ctx.fillRect(i * larguraBarra, canvas.height - 40, larguraBarra - 4, 40);
+  });
+
+  // linha de base
+  ctx.strokeStyle = "rgba(255,255,255,0.2)";
+  ctx.beginPath();
+  ctx.moveTo(0, canvas.height - 1);
+  ctx.lineTo(canvas.width, canvas.height - 1);
+  ctx.stroke();
 }
 
-function limparHistorico() {
-  if (confirm('Deseja realmente limpar o histórico?')) {
-    historico = [];
-    total = acertos = erros = 0;
-    salvarHistorico();
-    renderHistorico();
-    atualizarEstatisticas();
-  }
+// === TAXA DE ACERTO ===
+function atualizarTaxa() {
+  const taxa = total > 0 ? ((acertos / total) * 100).toFixed(1) : 0;
+  document.getElementById("taxaAcerto").innerText = `Taxa de acerto: ${taxa}%`;
 }
-
-// 🔄 Carregar histórico salvo ao abrir
-window.onload = function() {
-  if (historico.length > 0) {
-    total = historico.length;
-    acertos = historico.filter(h => h.resultado.includes('Acerto')).length;
-    erros = historico.filter(h => h.resultado.includes('Erro')).length;
-    atualizarEstatisticas();
-    renderHistorico();
-  }
-};
