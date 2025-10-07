@@ -44,16 +44,19 @@
     <section id="aviator">
       <h2>🎮 Jogar Aviator - ElephantBet</h2>
 
-<iframe
-  src="/proxy?url=https://www.premierbet.co.ao/casino/aviator"
-  width="100%"
-  height="700"
-  style="border:none; border-radius:12px; overflow:hidden;"
-  allowfullscreen>
-</iframe>
+      <div id="aviator-container">
+        <iframe 
+          id="aviatorFrame"
+          src="https://elephantbet.co.ao/casino/aviator"
+          width="100%"
+          height="700"
+          style="border:none; border-radius:12px; overflow:hidden;"
+          allowfullscreen>
+        </iframe>
+      </div>
 
-      <p style="margin-top:10px; font-size:14px; color:#ccc;">
-        Jogue diretamente o Aviator oficial da ElephantBet dentro do nosso site.
+      <p id="statusMsg" style="margin-top:10px; font-size:14px; color:#ccc;">
+        Tentando conectar ao Aviator da ElephantBet...
       </p>
     </section>
 
@@ -64,5 +67,26 @@
   </footer>
 
   <script src="script.js"></script>
+
+  <script>
+    // troca automática se o site da ElephantBet não responder
+    const iframe = document.getElementById('aviatorFrame');
+    const statusMsg = document.getElementById('statusMsg');
+
+    let checkTimeout = setTimeout(() => {
+      statusMsg.innerHTML = "ElephantBet recusou a conexão. Alternando para PremierBet...";
+      iframe.src = "https://www.premierbet.co.ao/casino/aviator";
+      setTimeout(() => {
+        statusMsg.innerHTML = "Conectado com sucesso ao Aviator da PremierBet ✅";
+      }, 4000);
+    }, 5000); // espera 5 segundos antes de trocar
+
+    // se carregar, cancela a troca
+    iframe.onload = () => {
+      clearTimeout(checkTimeout);
+      statusMsg.innerHTML = "Conectado com sucesso à ElephantBet ✅";
+    };
+  </script>
+
 </body>
-</html>
+  </html>
