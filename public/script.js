@@ -123,5 +123,10 @@ function atualizarTaxa() {
     elemento.style.color = "#ffcc00"; // amarelo
   } else {
     elemento.style.color = "#ff3366"; // vermelho
+    function atualizarLimite() {
+  const select = document.getElementById("limiteRodadas");
+  limiteRodadas = parseInt(select.value);
+  console.log(`Limite de rodadas ajustado para: ${limiteRodadas}`);
+    }
   }
     }
