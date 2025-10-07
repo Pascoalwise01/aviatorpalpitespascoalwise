@@ -1,48 +1,78 @@
+let historico = JSON.parse(localStorage.getItem('historico')) || [];
 let total = 0, acertos = 0, erros = 0;
 
-function aleatorio(min, max) {
-  return (Math.random() * (max - min) + min).toFixed(2);
-}
-
 function gerarPalpite() {
-  const now = new Date();
-  const hora = now.toLocaleTimeString();
+  const ultimaRodada = (Math.random() * 10).toFixed(2);
+  const protecao = (Math.random() * 2 + 1).toFixed(2);
+  const caiEm = (Math.random() * 10 + 1).toFixed(2);
+  const resultado = Math.random() > 0.5 ? 'Acerto ✅' : 'Erro ❌';
+  const hora = new Date().toLocaleTimeString();
 
-  // simular última rodada
-  const ultima = aleatorio(1, 15);
+  const novo = { hora, ultimaRodada, protecao, caiEm, resultado };
+  historico.unshift(novo);
 
-  // lógica de proteção e alvo
-  let protecao, queda;
-  if (ultima < 2) {
-    protecao = aleatorio(2, 3);
-    queda = aleatorio(6, 10);
-  } else if (ultima < 5) {
-    protecao = aleatorio(2, 2.8);
-    queda = aleatorio(4, 7);
-  } else {
-    protecao = aleatorio(1.5, 2.3);
-    queda = aleatorio(2.5, 4.5);
-  }
-
-  // gerar probabilidade de acerto simulado
-  const acertou = Math.random() > 0.5;
-
+  if (resultado.includes('Acerto')) acertos++;
+  else erros++;
   total++;
-  if (acertou) acertos++; else erros++;
 
-  document.getElementById("total").innerText = total;
-  document.getElementById("acertos").innerText = acertos;
-  document.getElementById("erros").innerText = erros;
-
-  document.getElementById("ultimaRodada").innerText = `Última rodada: ${ultima}x`;
-  document.getElementById("resultado").innerText = `Proteção: ${protecao}x | Cai em: ${queda}x`;
-
-  const tabela = document.getElementById("histTable");
-  const row = tabela.insertRow(-1);
-  row.insertCell(0).innerText = total;
-  row.insertCell(1).innerText = hora;
-  row.insertCell(2).innerText = `${ultima}x`;
-  row.insertCell(3).innerText = `${protecao}x`;
-  row.insertCell(4).innerText = `${queda}x`;
-  row.insertCell(5).innerText = acertou ? "Acertou" : "Errou";
+  atualizarEstatisticas();
+  renderHistorico();
+  salvarHistorico();
 }
+
+function atualizarEstatisticas() {
+  document.getElementById('total').textContent = total;
+  document.getElementById('acertos').textContent = acertos;
+  document.getElementById('erros').textContent = erros;
+}
+
+function renderHistorico() {
+  const tabela = document.getElementById('histTable');
+  tabela.innerHTML = `
+    <tr>
+      <th>#</th>
+      <th>Hora</th>
+      <th>Última Rodada</th>
+      <th>Proteção</th>
+      <th>Cai em</th>
+      <th>Resultado</th>
+    </tr>
+  `;
+  historico.slice(0, 15).forEach((item, i) => {
+    tabela.innerHTML += `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${item.hora}</td>
+        <td>${item.ultimaRodada}</td>
+        <td>${item.protecao}</td>
+        <td>${item.caiEm}</td>
+        <td>${item.resultado}</td>
+      </tr>
+    `;
+  });
+}
+
+function salvarHistorico() {
+  localStorage.setItem('historico', JSON.stringify(historico));
+}
+
+function limparHistorico() {
+  if (confirm('Deseja realmente limpar o histórico?')) {
+    historico = [];
+    total = acertos = erros = 0;
+    salvarHistorico();
+    renderHistorico();
+    atualizarEstatisticas();
+  }
+}
+
+// 🔄 Carregar histórico salvo ao abrir
+window.onload = function() {
+  if (historico.length > 0) {
+    total = historico.length;
+    acertos = historico.filter(h => h.resultado.includes('Acerto')).length;
+    erros = historico.filter(h => h.resultado.includes('Erro')).length;
+    atualizarEstatisticas();
+    renderHistorico();
+  }
+};
