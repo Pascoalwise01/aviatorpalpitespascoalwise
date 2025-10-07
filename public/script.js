@@ -1,4 +1,5 @@
 // === VARIÁVEIS GLOBAIS ===
+let limiteRodadas = 20;
 let total = 0;
 let acertos = 0;
 let erros = 0;
