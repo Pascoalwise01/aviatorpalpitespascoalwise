@@ -1,176 +1,77 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Aviator Palpites Pascoal Wise</title>
   <link rel="stylesheet" href="style.css" />
-  <style>
-    /* Pequeno estilo extra para os cards dos sites (não altera o style.css principal) */
-    .site-cards {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-top: 12px;
-    }
-    .site-card {
-      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
-      border-radius: 10px;
-      padding: 14px 18px;
-      min-width: 200px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.4);
-      text-align: center;
-    }
-    .site-card h4 { margin: 0 0 6px 0; color:#fff; font-size:16px; }
-    .site-card p { margin: 0 0 10px 0; color:#ddd; font-size:13px; }
-    .site-card .open-btn {
-      background: linear-gradient(90deg, #9b0dff, #ff0040);
-      color: white;
-      padding: 8px 14px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      font-weight: 700;
-      box-shadow: 0 6px 14px rgba(155,13,255,0.12);
-    }
-    .site-note { color:#ccc; margin-top:10px; font-size:0.95em; text-align:center; }
-  </style>
 </head>
 <body>
   <header>
     <h1>✈️ Aviator Palpites Pascoal Wise</h1>
-    <p>Palpites automáticos e análise lógica do Aviator</p>
+    <p>Carregue a screenshot do histórico (uma única vez). Depois gere palpites e valide manualmente.</p>
   </header>
 
   <main>
+    <!-- UPLOAD ÚNICO -->
+    <section id="uploadSection" class="card">
+      <h2>🔎 Carregar Histórico (screenshot)</h2>
+      <p class="info">Envie apenas uma screenshot clara do histórico do Aviator (apenas uma vez). O servidor irá processar e extrair multiplicadores.</p>
 
-    <!-- PALPITES AUTOMÁTICOS -->
-    <section id="palpites">
-      <h2>🎯 Palpite Automático</h2>
-
-      <div id="ultimaRodada" class="info">Última rodada: --</div>
-      <div id="resultado" class="info">Clique em "Gerar Palpite"</div>
-
-      <!-- Taxa de acerto -->
-      <p id="taxaAcerto" style="margin-top:8px; font-weight:bold; color:#00ff80;">
-        Taxa de acerto: 0%
-      </p>
-
-      <button onclick="gerarPalpite()">Gerar Palpite</button>
-
-      <!-- CONFIGURAÇÕES -->
-      <div id="configuracoes" style="margin-top:20px; background:rgba(255,255,255,0.02); border-radius:10px; padding:10px;">
-        <h3>⚙️ Configurações</h3>
-        <label for="limiteRodadas">Número de rodadas a guardar no histórico:</label>
-        <select id="limiteRodadas" onchange="atualizarLimite()">
-          <option value="10">10</option>
-          <option value="20" selected>20</option>
-          <option value="30">30</option>
-          <option value="50">50</option>
-        </select>
+      <div class="row">
+        <input id="imageInput" type="file" accept="image/*" />
+        <button id="btnUpload">Enviar e Processar</button>
       </div>
 
-      <!-- Estatísticas -->
-      <table id="estatisticas" style="margin-top:14px;">
-        <tr>
-          <th>Gerados</th>
-          <th>Acertos</th>
-          <th>Erros</th>
-        </tr>
-        <tr>
-          <td id="total">0</td>
-          <td id="acertos">0</td>
-          <td id="erros">0</td>
-        </tr>
-      </table>
-
-      <!-- Histórico -->
-      <h3 style="margin-top:16px;">📊 Histórico de Palpites</h3>
-      <table id="histTable">
-        <tr>
-          <th>#</th>
-          <th>Hora</th>
-          <th>Última Rodada</th>
-          <th>Proteção</th>
-          <th>Cai em</th>
-          <th>Resultado</th>
-        </tr>
-      </table>
-
-      <!-- Gráfico de desempenho -->
-      <canvas id="graficoResultados" width="600" height="100"
-        style="margin-top:15px; background:rgba(255,255,255,0.03); border-radius:8px;">
-      </canvas>
+      <p id="uploadStatus" class="info" style="color:#ffd;"></p>
     </section>
 
-    <!-- LINKS PARA ABRIR O JOGO (SEM IFRAME) -->
-    <section id="aviator" style="margin-top:28px;">
+    <!-- PALPITES -->
+    <section id="palpites" class="card">
+      <h2>🎯 Palpites</h2>
+
+      <div id="ultimaRodada" class="info">Última: —</div>
+      <div id="resultado" class="info">Aguardando upload da screenshot...</div>
+
+      <div class="row" style="align-items:center; gap:8px; margin-top:10px;">
+        <label>Confiança desejada</label>
+        <input id="confSlider" type="range" min="10" max="80" step="5" value="40">
+        <span id="confLabel">40%</span>
+        <button id="btnGerar" disabled>Gerar Palpite</button>
+      </div>
+
+      <div style="margin-top:10px;">
+        <p id="taxaAcerto" class="info" style="font-weight:bold; color:#00ff80;">Taxa de acerto: 0%</p>
+      </div>
+
+      <table id="estatisticas" class="table">
+        <tr><th>Gerados</th><th>Acertos</th><th>Erros</th></tr>
+        <tr><td id="total">0</td><td id="acertos">0</td><td id="erros">0</td></tr>
+      </table>
+
+      <h3>📊 Histórico (Últimas)</h3>
+      <table id="histTable" class="table">
+        <tr><th>#</th><th>Hora</th><th>Previsão</th><th>Cor</th><th>Resultado</th><th>Imagem</th></tr>
+      </table>
+
+      <canvas id="graficoResultados" width="700" height="80" style="margin-top:12px;background:rgba(255,255,255,0.03);border-radius:8px;"></canvas>
+    </section>
+
+    <!-- LINKS -->
+    <section class="card">
       <h2>🎮 Abrir Aviator</h2>
-      <p class="site-note">O jogo não é exibido dentro do site (algumas casas bloqueiam embedding). Abra no site oficial:</p>
-
-      <div class="site-cards">
-        <div class="site-card">
-          <h4>ElephantBet</h4>
-          <p>Abrir Aviator oficial na ElephantBet</p>
-          <button class="open-btn" onclick="window.open('https://elephantbet.co.ao/casino/aviator', '_blank', 'noopener')">
-            Abrir ElephantBet
-          </button>
-        </div>
-
-        <div class="site-card">
-          <h4>PremierBet</h4>
-          <p>Alternativa — Aviator (Spribe)</p>
-          <button class="open-btn" onclick="window.open('https://www.premierbet.co.ao/casino/aviator', '_blank', 'noopener')">
-            Abrir PremierBet
-          </button>
-        </div>
-
-        <div class="site-card">
-          <h4>Outros (abrir manual)</h4>
-          <p>Colar URL do jogo (opcional)</p>
-          <div style="display:flex; gap:8px; justify-content:center;">
-            <input id="customUrl" type="text" placeholder="https://..." style="padding:6px; border-radius:6px; border:1px solid rgba(255,255,255,0.08); width:220px;">
-            <button class="open-btn" onclick="abrirCustom()">Abrir</button>
-          </div>
-        </div>
+      <div class="row">
+        <button onclick="window.open('https://elephantbet.co.ao/casino/aviator','_blank','noopener')">Abrir ElephantBet</button>
+        <button onclick="window.open('https://www.premierbet.co.ao/casino/aviator','_blank','noopener')">Abrir PremierBet</button>
       </div>
-
-      <p class="site-note" style="margin-top:10px;">
-        Nota: os sites oficiais abrem numa nova aba. Mantemos aqui os palpites e histórico enquanto joga.
-      </p>
+      <p class="info">O jogo abre numa nova aba; aqui mantemos palpites e histórico.</p>
     </section>
-
   </main>
 
   <footer>
-    <p>© 2025 Aviator Palpites Pascoal Wise — Made by Pascoal Wise 🚀</p>
+    <p>© 2025 Aviator Palpites Pascoal Wise</p>
   </footer>
 
-  <!-- Mantém o teu script principal -->
   <script src="script.js"></script>
-
-  <!-- Função pequena para botão custom -->
-  <script>
-    function abrirCustom() {
-      const url = document.getElementById('customUrl').value.trim();
-      if (!url) return alert('Cole uma URL válida do jogo.');
-      window.open(url, '_blank', 'noopener');
-    }
-
-    // Função para atualizar limite (caso não esteja no script.js)
-    function atualizarLimite() {
-      const select = document.getElementById('limiteRodadas');
-      const val = parseInt(select.value);
-      // define global limiteRodadas se estiver usado no script.js
-      if (typeof window.limiteRodadas !== 'undefined') {
-        window.limiteRodadas = val;
-      } else {
-        // define global temporário para compatibilidade
-        window.limiteRodadas = val;
-      }
-      console.log('Limite de rodadas ajustado para:', val);
-    }
-  </script>
 </body>
-        </html>
+    </html>
