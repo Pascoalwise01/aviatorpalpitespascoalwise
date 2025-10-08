@@ -26,17 +26,25 @@ const worker = createWorker({
 
 let workerReady = false;
 (async () => {
+  console.log('Inicializando OCR (Tesseract)...');
   try {
     await worker.load();
     await worker.loadLanguage('eng');
     await worker.initialize('eng');
     workerReady = true;
-    console.log('Tesseract ready');
+    console.log('✅ Tesseract pronto!');
   } catch (e) {
-    console.error('Erro inicializar Tesseract:', e);
+    console.error('Erro ao inicializar Tesseract:', e);
   }
 })();
 
+// bloqueia uploads até o worker estar pronto
+app.use((req, res, next) => {
+  if (!workerReady) {
+    return res.status(503).send('OCR ainda a iniciar, aguarde alguns segundos e recarregue.');
+  }
+  next();
+});
 // Rota OCR: recebe campo 'image' e devolve valores extraídos
 app.post('/upload', upload.single('image'), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'Nenhuma imagem enviada' });
