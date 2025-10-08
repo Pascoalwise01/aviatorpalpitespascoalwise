@@ -1,5 +1,5 @@
 {
-  "name": "aviatorpalpitespascoalwise",
+  "name": "aviator-palpites-pascoalwise",
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
@@ -8,6 +8,7 @@
   "dependencies": {
     "express": "^4.18.2",
     "cors": "^2.8.5",
-    "node-fetch": "^3.3.2"
+    "multer": "^1.4.5-lts.1",
+    "tesseract.js": "^2.1.5"
   }
 }
