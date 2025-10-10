@@ -1,84 +1,53 @@
-// === server.js ===
+// server.js
 import express from "express";
 import multer from "multer";
 import cors from "cors";
 import fs from "fs";
 import Tesseract from "tesseract.js";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const app = express();
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(express.static(path.join(__dirname, "public")));
-app.use(express.json());
+app.use(express.static("public"));
 
-// === Configuração do upload ===
+// === Configuração de armazenamento para uploads ===
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "uploads/"),
-  filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname)
+  destination: function (req, file, cb) {
+    const dir = "./uploads";
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+    cb(null, dir);
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
 });
 const upload = multer({ storage });
 
-// === Inicialização do Tesseract (OCR) ===
-let workerReady = false;
-const worker = Tesseract.createWorker();
-
-(async () => {
-  console.log("🧠 Inicializando OCR (Tesseract)...");
-  try {
-    await worker.load();
-    await worker.loadLanguage("eng");
-    await worker.initialize("eng");
-    workerReady = true;
-    console.log("✅ Tesseract pronto para uso!");
-  } catch (e) {
-    console.error("❌ Erro ao inicializar Tesseract:", e);
-  }
-})();
-
-// Bloqueia uploads até o OCR estar pronto
-app.use((req, res, next) => {
-  if (!workerReady) {
-    return res
-      .status(503)
-      .send("OCR ainda a iniciar, aguarde alguns segundos e recarregue a página.");
-  }
-  next();
-});
-
-// === Rota de upload + processamento OCR ===
+// === Endpoint principal de upload e OCR ===
 app.post("/upload", upload.single("image"), async (req, res) => {
-  const filePath = req.file.path;
-  console.log("📸 Imagem recebida:", filePath);
-
   try {
-    const { data } = await worker.recognize(filePath);
-    const text = data.text;
+    const filePath = req.file.path;
 
-    // Extrai todos os números no formato "X.xx" seguidos de "x"
-    const odds = Array.from(text.matchAll(/(\d{1,3}\.\d{1,2})x?/g)).map(m => parseFloat(m[1]));
-    console.log("🎯 Odds extraídos:", odds);
+    // Reconhece texto com Tesseract OCR
+    const result = await Tesseract.recognize(filePath, "eng");
 
-    // Limpa arquivo temporário
+    // Extrai números decimais (valores tipo 1.23, 5x, 12.4x)
+    const text = result.data.text;
+    const odds = Array.from(text.matchAll(/(\d+(\.\d+)?)[xX]?/g)).map((m) =>
+      parseFloat(m[1])
+    );
+
+    // Apaga o ficheiro após processar
     fs.unlinkSync(filePath);
 
-    if (odds.length === 0) {
-      return res.status(400).json({ error: "Nenhum valor de rodada identificado na imagem." });
-    }
+    if (!odds.length)
+      return res.json({ success: false, error: "Nenhum valor numérico encontrado." });
 
     res.json({ success: true, odds });
   } catch (err) {
-    console.error("Erro ao processar OCR:", err);
-    res.status(500).json({ error: "Falha ao processar imagem." });
+    res.json({ success: false, error: err.message });
   }
 });
 
-// === Inicializa o servidor ===
-app.listen(port, () => {
-  console.log(`🚀 Servidor online em http://localhost:${port}`);
-});
+app.listen(PORT, () => console.log(`✅ Servidor online na porta ${PORT}`));
