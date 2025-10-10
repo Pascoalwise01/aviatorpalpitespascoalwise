@@ -1,77 +1,38 @@
-<!doctype html>
-<html lang="pt">
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Aviator Palpites Pascoal Wise</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aviator Smart Predictor</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>✈️ Aviator Palpites Pascoal Wise</h1>
-    <p>Carregue a screenshot do histórico (uma única vez). Depois gere palpites e valide manualmente.</p>
-  </header>
+  <div class="container">
+    <h1>🎯 Aviator Smart Predictor</h1>
+    <p>Carregue a imagem com o histórico de rodadas e receba previsões automáticas.</p>
 
-  <main>
-    <!-- UPLOAD ÚNICO -->
-    <section id="uploadSection" class="card">
-      <h2>🔎 Carregar Histórico (screenshot)</h2>
-      <p class="info">Envie apenas uma screenshot clara do histórico do Aviator (apenas uma vez). O servidor irá processar e extrair multiplicadores.</p>
+    <form id="upload-form">
+      <label for="image">📸 Enviar imagem do histórico:</label>
+      <input type="file" id="image" accept="image/*" required />
+      <button type="submit">Enviar e Processar</button>
+    </form>
 
-      <div class="row">
-        <input id="imageInput" type="file" accept="image/*" />
-        <button id="btnUpload">Enviar e Processar</button>
+    <div id="result" class="hidden">
+      <h2>📊 Resultados processados:</h2>
+      <div id="odds-list"></div>
+
+      <div class="manual-entry">
+        <h3>⚙️ Corrigir rodada manualmente (se o palpite errou):</h3>
+        <label for="manualValue">Insira o valor (ex: 3.45):</label>
+        <input type="number" id="manualValue" step="0.01" />
+        <button id="manualSubmit">Registrar e Gerar Novo Palpite</button>
       </div>
 
-      <p id="uploadStatus" class="info" style="color:#ffd;"></p>
-    </section>
-
-    <!-- PALPITES -->
-    <section id="palpites" class="card">
-      <h2>🎯 Palpites</h2>
-
-      <div id="ultimaRodada" class="info">Última: —</div>
-      <div id="resultado" class="info">Aguardando upload da screenshot...</div>
-
-      <div class="row" style="align-items:center; gap:8px; margin-top:10px;">
-        <label>Confiança desejada</label>
-        <input id="confSlider" type="range" min="10" max="80" step="5" value="40">
-        <span id="confLabel">40%</span>
-        <button id="btnGerar" disabled>Gerar Palpite</button>
-      </div>
-
-      <div style="margin-top:10px;">
-        <p id="taxaAcerto" class="info" style="font-weight:bold; color:#00ff80;">Taxa de acerto: 0%</p>
-      </div>
-
-      <table id="estatisticas" class="table">
-        <tr><th>Gerados</th><th>Acertos</th><th>Erros</th></tr>
-        <tr><td id="total">0</td><td id="acertos">0</td><td id="erros">0</td></tr>
-      </table>
-
-      <h3>📊 Histórico (Últimas)</h3>
-      <table id="histTable" class="table">
-        <tr><th>#</th><th>Hora</th><th>Previsão</th><th>Cor</th><th>Resultado</th><th>Imagem</th></tr>
-      </table>
-
-      <canvas id="graficoResultados" width="700" height="80" style="margin-top:12px;background:rgba(255,255,255,0.03);border-radius:8px;"></canvas>
-    </section>
-
-    <!-- LINKS -->
-    <section class="card">
-      <h2>🎮 Abrir Aviator</h2>
-      <div class="row">
-        <button onclick="window.open('https://elephantbet.co.ao/casino/aviator','_blank','noopener')">Abrir ElephantBet</button>
-        <button onclick="window.open('https://www.premierbet.co.ao/casino/aviator','_blank','noopener')">Abrir PremierBet</button>
-      </div>
-      <p class="info">O jogo abre numa nova aba; aqui mantemos palpites e histórico.</p>
-    </section>
-  </main>
-
-  <footer>
-    <p>© 2025 Aviator Palpites Pascoal Wise</p>
-  </footer>
+      <div id="prediction"></div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
-    </html>
+</html>
