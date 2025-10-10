@@ -1,65 +1,83 @@
-/* public/style.css */
-
 body {
-  background: #101522;
-  color: #f2f2f2;
-  font-family: "Segoe UI", sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  font-family: "Poppins", sans-serif;
+  background: radial-gradient(circle at top, #0a0a0a, #111);
+  color: #fff;
   margin: 0;
+  padding: 0;
+  text-align: center;
 }
 
 .container {
-  background: #1c2130;
-  padding: 25px;
-  border-radius: 12px;
-  width: 95%;
   max-width: 500px;
-  text-align: center;
-  box-shadow: 0 0 20px rgba(255, 0, 100, 0.3);
+  margin: 50px auto;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
 }
 
 h1 {
-  color: #ff3366;
+  color: #00ffff;
+  margin-bottom: 10px;
 }
 
-form {
-  margin: 20px 0;
+h2 {
+  color: #ffd700;
+  margin-top: 30px;
 }
 
 button {
-  margin-top: 10px;
-  padding: 10px 15px;
+  background: linear-gradient(45deg, #00bcd4, #2196f3);
   border: none;
-  background: #ff3366;
   color: white;
+  padding: 10px 15px;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 16px;
+  font-weight: bold;
+  margin-top: 10px;
 }
+
 button:hover {
-  background: #ff6699;
+  background: linear-gradient(45deg, #2196f3, #00bcd4);
+  transform: scale(1.05);
 }
 
-.hidden {
-  display: none;
+#history {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 10px 0;
 }
 
-#odds-list span {
-  margin: 5px;
-  display: inline-block;
-  background: #282f44;
-  padding: 5px 8px;
-  border-radius: 6px;
+.hold {
+  border-radius: 5px;
+  padding: 8px 10px;
+  margin: 4px;
+  font-weight: bold;
+}
+
+.hold.azul {
+  background: #0066ff;
+}
+
+.hold.lilas {
+  background: #aa00ff;
+}
+
+.hold.vermelho {
+  background: #ff0033;
+}
+
+footer {
+  margin-top: 40px;
   font-size: 14px;
+  opacity: 0.8;
 }
 
-.manual-entry {
-  margin-top: 20px;
-  text-align: left;
-  background: #282f44;
-  padding: 10px;
-  border-radius: 8px;
+footer a {
+  color: #00ffff;
+  text-decoration: none;
 }
+footer a:hover {
+  text-decoration: underline;
+  }
