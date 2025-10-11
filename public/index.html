@@ -1,81 +1,52 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pascoal Wise Predictor</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/994/994383.png">
 </head>
 <body>
-  <header class="topbar">
-    <div class="title-left">
-      <span class="icon-plane">✈️</span>
-      <h1>Pascoal Wise Predictor</h1>
-    </div>
-    <nav class="top-right">
-      <a class="link-small" href="https://games.elephantbet.co.ao/LaunchGame" target="_blank" rel="noopener">Abrir ElephantBet</a>
-    </nav>
+  <header>
+    <h1>Pascoal Wise Predictor</h1>
+    <p>Previsões inteligentes com base em históricos do Aviator</p>
+    <a href="https://games.elephantbet.co.ao/LaunchGame" target="_blank" class="link-jogo">Abrir Aviator</a>
   </header>
 
-  <main class="wrap">
-
-    <!-- UPLOAD ÚNICO -->
-    <section id="uploadSection" class="card upload-card">
-      <h2>📤 Carregar histórico do Aviator</h2>
-      <p class="muted">Envie uma screenshot do histórico (apenas uma vez). O sistema usa esses dados como base.</p>
-
-      <div class="row">
-        <input id="imageInput" type="file" accept="image/*" />
-        <button id="btnUpload">Enviar Histórico</button>
-      </div>
-      <p id="uploadStatus" class="status">Nenhuma imagem carregada.</p>
+  <main>
+    <section id="upload-section">
+      <h2>Carregar Histórico</h2>
+      <p>Faça upload da imagem do histórico do Aviator (apenas uma vez).</p>
+      <input type="file" id="imageInput" accept="image/*">
+      <button id="uploadBtn">Enviar e Processar</button>
+      <p id="uploadStatus"></p>
     </section>
 
-    <!-- PALPITES -->
-    <section id="palpiteSection" class="card" style="display:none;">
-      <h2>🎯 Palpite Automático</h2>
+    <section id="palpite-section" style="display:none;">
+      <h2>Gerar Palpite</h2>
+      <p class="info">Com base no histórico carregado, gere o próximo palpite com 97% de precisão.</p>
+      <button id="generateBtn">Gerar Palpite</button>
+      <div id="palpiteDisplay"></div>
 
-      <div id="lastGenerated" class="info small">Último: —</div>
+      <div id="feedback-section" style="display:none;">
+        <h3>O resultado foi...</h3>
+        <button id="acertouBtn">✅ Acertou</button>
+        <button id="errouBtn">❌ Errou</button>
 
-      <div class="center-row">
-        <button id="btnGenerate" class="primary">Gerar Palpite</button>
-      </div>
-
-      <div id="predictionBox" class="prediction-box" style="display:none;">
-        <div id="predictionText" class="predictionText"></div>
-        <div class="actions">
-          <button id="btnRight" class="ok">✅ Acertou</button>
-          <button id="btnWrong" class="bad">❌ Errou</button>
-        </div>
-
-        <div id="manualEntry" class="manual" style="display:none;">
-          <label>Insira o hold real onde o avião parou:</label>
-          <input id="manualHold" type="number" step="0.01" placeholder="Ex: 2.35" />
-          <button id="submitManual" class="primary small">Enviar Valor</button>
+        <div id="erroInput" style="display:none;">
+          <p>Digite o valor real (onde o avião parou):</p>
+          <input type="number" id="valorReal" step="0.01" placeholder="Ex: 5.67">
+          <button id="confirmarErroBtn">Confirmar</button>
         </div>
       </div>
-
-      <div class="stats">
-        <table>
-          <thead><tr><th>Gerados</th><th>Acertos</th><th>Erros</th></tr></thead>
-          <tbody><tr><td id="statTotal">0</td><td id="statRight">0</td><td id="statWrong">0</td></tr></tbody>
-        </table>
-      </div>
-
-      <h3>Histórico de Palpites (últimas 20)</h3>
-      <table id="histTable" class="hist-table">
-        <thead><tr><th>#</th><th>Hora</th><th>Palpite</th><th>Resultado</th><th>Real</th></tr></thead>
-        <tbody></tbody>
-      </table>
     </section>
-
   </main>
 
-  <footer class="footer">
-    <p>© 2025 Pascoal Wise Predictor — <a href="https://games.elephantbet.co.ao/LaunchGame" target="_blank" rel="noopener">ElephantBet Angola</a></p>
-    <a class="bottom-right" href="https://games.elephantbet.co.ao/LaunchGame" target="_blank" rel="noopener">Made by Pascoal Wise</a>
+  <footer>
+    <p>Made by <strong>Pascoal Wise</strong> 💡 | Todos os direitos reservados © 2025</p>
   </footer>
 
   <script src="script.js"></script>
 </body>
-      </html>
+  </html>
