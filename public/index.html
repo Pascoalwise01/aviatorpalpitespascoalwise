@@ -1,48 +1,61 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pascoal Wise Predictor</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>🎯 Pascoal Wise Predictor</h1>
+  <header>
+    <h1>✈️ Pascoal Wise Predictor</h1>
+    <p>Palpites automáticos e análise lógica do Aviator ElephantBet</p>
+  </header>
 
-    <div id="upload-section">
-      <p>📷 Carrega a imagem do histórico do Aviator (apenas uma vez)</p>
-      <input type="file" id="imageUpload" accept="image/*" />
-      <button id="processImage">Enviar e Processar</button>
-      <p id="ocr-status"></p>
-    </div>
+  <main>
 
-    <div id="game-section" style="display:none;">
-      <h2>📊 Histórico Atual</h2>
-      <div id="history"></div>
+    <!-- Upload do histórico -->
+    <section id="upload">
+      <h2>📤 Carregar histórico do Aviator</h2>
+      <form id="uploadForm">
+        <input type="file" id="imagem" accept="image/*" required>
+        <button type="submit">Enviar Histórico</button>
+      </form>
+      <p id="uploadStatus">Nenhuma imagem carregada ainda.</p>
+    </section>
 
-      <div id="prediction-section">
-        <button id="generatePrediction">Gerar Previsão</button>
-        <p id="predictionResult"></p>
-      </div>
+    <!-- Palpites -->
+    <section id="palpites">
+      <h2>🎯 Palpite Automático</h2>
 
-      <div id="manual-correction" style="display:none;">
-        <p>❌ O palpite falhou. Introduz o hold real:</p>
-        <input type="number" id="manualHold" placeholder="Ex: 3.45" step="0.01" />
-        <button id="submitHold">Enviar</button>
-      </div>
-    </div>
-  </div>
+      <div id="resultado" class="info">Clique em "Gerar Palpite"</div>
+      <button id="gerarBtn">Gerar Palpite</button>
+
+      <table id="estatisticas">
+        <tr><th>Gerados</th><th>Acertos</th><th>Erros</th></tr>
+        <tr><td id="total">0</td><td id="acertos">0</td><td id="erros">0</td></tr>
+      </table>
+
+      <h3>Histórico de Palpites (últimas 20 rodadas)</h3>
+      <table id="histTable">
+        <tr>
+          <th>#</th><th>Hora</th><th>Palpite</th><th>Resultado</th>
+        </tr>
+      </table>
+    </section>
+
+    <!-- Link externo -->
+    <section id="aviator">
+      <h2>🎮 Jogar Aviator - ElephantBet</h2>
+      <a href="https://games.elephantbet.co.ao/LaunchGame" target="_blank" class="link-btn">Abrir Aviator Oficial</a>
+    </section>
+
+  </main>
 
   <footer>
-    <p>
-      Made by <strong>Pascoal Wise Predictor</strong> |
-      <a href="https://games.elephantbet.co.ao/LaunchGame" target="_blank">
-        Jogar na ElephantBet 🎰
-      </a>
-    </p>
+    <p>© 2025 Pascoal Wise Predictor. Made by Pascoal Wise 🚀</p>
   </footer>
 
   <script src="script.js"></script>
 </body>
-</html>
+  </html>
