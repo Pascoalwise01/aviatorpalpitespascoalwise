@@ -1,4 +1,4 @@
-// server.js
+// server.js — versão corrigida Pascoal Wise Predictor
 import express from "express";
 import multer from "multer";
 import path from "path";
@@ -6,58 +6,59 @@ import fs from "fs";
 import Tesseract from "tesseract.js";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-// Caminho absoluto da pasta pública
+// Corrige diretório base (necessário no Render)
 const __dirname = path.resolve();
 
-// Middleware para servir arquivos estáticos
+// Pasta pública (onde está index.html)
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
-// Configuração da pasta de upload
-const uploadFolder = path.join(__dirname, "upload");
-if (!fs.existsSync(uploadFolder)) fs.mkdirSync(uploadFolder);
+// Pasta de uploads
+const uploadDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
 
-// Configuração do multer
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, uploadFolder),
+  destination: (req, file, cb) => cb(null, uploadDir),
   filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
 });
 const upload = multer({ storage });
 
-// ✅ Redireciona a rota raiz ("/") para o index.html
+// ---------- ROTAS PRINCIPAIS ---------- //
+
+// rota raiz → serve o index.html
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// Rota de upload e processamento OCR
-app.post("/process-image", upload.single("image"), async (req, res) => {
+// rota de upload da imagem
+app.post("/upload", upload.single("image"), async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ success: false, message: "Nenhum arquivo enviado." });
+      return res.status(400).json({ success: false, message: "Nenhum arquivo recebido." });
     }
 
     const imagePath = req.file.path;
-    console.log(`🖼️ Processando imagem: ${imagePath}`);
 
+    // OCR
     const result = await Tesseract.recognize(imagePath, "eng");
     const text = result.data.text;
-    fs.unlinkSync(imagePath); // Apaga a imagem após o processamento
 
+    fs.unlinkSync(imagePath);
     res.json({ success: true, text });
-  } catch (error) {
-    console.error("Erro no processamento OCR:", error);
-    res.status(500).json({ success: false, message: "Falha ao processar a imagem." });
+  } catch (err) {
+    console.error("Erro no OCR:", err.message);
+    res.status(500).json({ success: false, message: "Erro ao processar a imagem." });
   }
 });
 
-// Inicia o servidor
+// rota para verificar se o servidor está vivo
+app.get("/status", (req, res) => {
+  res.json({ status: "ok", message: "Servidor Pascoal Wise Predictor ativo." });
+});
+
+// ---------- INICIALIZAÇÃO ---------- //
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
-  // const result = await Tesseract.recognize(imagePath, "eng");
-// const text = result.data.text;
-// fs.unlinkSync(imagePath);
-// res.json({ success: true, text });
-res.json({ success: true, text: "Simulação de OCR (teste de deploy)." });
 });
