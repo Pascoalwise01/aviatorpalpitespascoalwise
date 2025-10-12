@@ -1,59 +1,49 @@
-let historicoProcessado = false;
-let ultimoPalpite = null;
+let historico = [];
 let acertos = 0;
 let erros = 0;
 
-// Processar upload da imagem
-document.getElementById("uploadBtn").addEventListener("click", () => {
-  const file = document.getElementById("imageInput").files[0];
-  const status = document.getElementById("uploadStatus");
-  if (!file) {
-    status.textContent = "Por favor, selecione uma imagem primeiro.";
+document.getElementById("carregarHistorico").addEventListener("click", () => {
+  const dados = document.getElementById("dadosHistorico").value.trim();
+  if (dados === "") {
+    alert("Insira o histórico antes de carregar!");
+    return;
+  }
+  historico = dados.split("\n").map(v => parseFloat(v)).filter(n => !isNaN(n));
+  alert("✅ Histórico carregado com sucesso!");
+});
+
+document.getElementById("gerarPalpite").addEventListener("click", () => {
+  if (historico.length === 0) {
+    alert("Carregue primeiro o histórico!");
     return;
   }
 
-  status.textContent = "Processando imagem...";
-  setTimeout(() => {
-    historicoProcessado = true;
-    document.getElementById("upload-section").style.display = "none";
-    document.getElementById("palpite-section").style.display = "block";
-  }, 2000);
+  const media = historico.reduce((a, b) => a + b, 0) / historico.length;
+  const variacao = (Math.random() - 0.5) * 0.2;
+  const palpite = (media * (1 + variacao)).toFixed(2);
+
+  const res = document.getElementById("resultadoPalpite");
+  res.textContent = `Palpite: ${palpite}x`;
+
+  const avaliacao = document.getElementById("avaliacao");
+  avaliacao.classList.remove("hidden");
+  document.getElementById("valorCorreto").classList.add("hidden");
 });
 
-// Gerar palpite com base no histórico (simulado)
-document.getElementById("generateBtn").addEventListener("click", () => {
-  if (!historicoProcessado) return alert("Carregue primeiro o histórico!");
-  
-  const chance = Math.random() * 100;
-  let valor = 0;
-  
-  if (chance < 10) valor = (Math.random() * 10 + 10).toFixed(2); // vermelho
-  else if (chance < 60) valor = (Math.random() * 8 + 2).toFixed(2); // lilás
-  else valor = (Math.random() * 1.99 + 1).toFixed(2); // azul
-
-  ultimoPalpite = valor;
-
-  const display = document.getElementById("palpiteDisplay");
-  display.innerHTML = `<strong>Próximo palpite:</strong> ${valor}x`;
-  document.getElementById("feedback-section").style.display = "block";
-});
-
-// Acertou
-document.getElementById("acertouBtn").addEventListener("click", () => {
+document.getElementById("acertou").addEventListener("click", () => {
   acertos++;
-  alert("Ótimo! O bot acertou ✅");
+  atualizarPrecisao();
+  document.getElementById("avaliacao").classList.add("hidden");
 });
 
-// Errou → pede valor real
-document.getElementById("errouBtn").addEventListener("click", () => {
-  document.getElementById("erroInput").style.display = "block";
-});
-
-// Confirma valor real
-document.getElementById("confirmarErroBtn").addEventListener("click", () => {
-  const valorReal = parseFloat(document.getElementById("valorReal").value);
-  if (isNaN(valorReal)) return alert("Digite um valor válido!");
+document.getElementById("errou").addEventListener("click", () => {
   erros++;
-  document.getElementById("erroInput").style.display = "none";
-  alert(`Erro registrado. Valor real: ${valorReal}x`);
+  document.getElementById("valorCorreto").classList.remove("hidden");
+  atualizarPrecisao();
 });
+
+function atualizarPrecisao() {
+  const total = acertos + erros;
+  const precisao = total === 0 ? 100 : ((acertos / total) * 100).toFixed(1);
+  document.getElementById("precisao").textContent = `${precisao}%`;
+}
