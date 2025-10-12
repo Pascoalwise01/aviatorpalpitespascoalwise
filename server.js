@@ -55,4 +55,9 @@ app.post("/process-image", upload.single("image"), async (req, res) => {
 // Inicia o servidor
 app.listen(PORT, () => {
   console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
+  // const result = await Tesseract.recognize(imagePath, "eng");
+// const text = result.data.text;
+// fs.unlinkSync(imagePath);
+// res.json({ success: true, text });
+res.json({ success: true, text: "Simulação de OCR (teste de deploy)." });
 });
