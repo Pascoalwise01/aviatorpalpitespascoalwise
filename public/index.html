@@ -1,52 +1,40 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pascoal Wise Predictor</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/994/994383.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aviator Palpites - Pascoal Wise</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>Pascoal Wise Predictor</h1>
-    <p>Previsões inteligentes com base em históricos do Aviator</p>
-    <a href="https://games.elephantbet.co.ao/LaunchGame" target="_blank" class="link-jogo">Abrir Aviator</a>
-  </header>
+  <div class="container">
+    <h1>✈️ Aviator Palpites</h1>
 
-  <main>
-    <section id="upload-section">
-      <h2>Carregar Histórico</h2>
-      <p>Faça upload da imagem do histórico do Aviator (apenas uma vez).</p>
-      <input type="file" id="imageInput" accept="image/*">
-      <button id="uploadBtn">Enviar e Processar</button>
-      <p id="uploadStatus"></p>
-    </section>
+    <div id="historico">
+      <h3>Histórico carregado</h3>
+      <textarea id="dadosHistorico" placeholder="Cole aqui os dados do histórico..."></textarea>
+      <button id="carregarHistorico">Carregar histórico</button>
+    </div>
 
-    <section id="palpite-section" style="display:none;">
-      <h2>Gerar Palpite</h2>
-      <p class="info">Com base no histórico carregado, gere o próximo palpite com 97% de precisão.</p>
-      <button id="generateBtn">Gerar Palpite</button>
-      <div id="palpiteDisplay"></div>
+    <div id="painel-palpite">
+      <h3>Gerar palpite</h3>
+      <button id="gerarPalpite">🎯 Gerar Palpite</button>
+      <p id="resultadoPalpite"></p>
 
-      <div id="feedback-section" style="display:none;">
-        <h3>O resultado foi...</h3>
-        <button id="acertouBtn">✅ Acertou</button>
-        <button id="errouBtn">❌ Errou</button>
-
-        <div id="erroInput" style="display:none;">
-          <p>Digite o valor real (onde o avião parou):</p>
-          <input type="number" id="valorReal" step="0.01" placeholder="Ex: 5.67">
-          <button id="confirmarErroBtn">Confirmar</button>
-        </div>
+      <div id="avaliacao" class="hidden">
+        <h4>O resultado deu certo?</h4>
+        <button id="acertou">✅ Acertou</button>
+        <button id="errou">❌ Errou</button>
+        <input id="valorCorreto" placeholder="Digite o valor que realmente caiu" class="hidden"/>
       </div>
-    </section>
-  </main>
+    </div>
 
-  <footer>
-    <p>Made by <strong>Pascoal Wise</strong> 💡 | Todos os direitos reservados © 2025</p>
-  </footer>
+    <div id="estatisticas">
+      <h3>Precisão</h3>
+      <p id="precisao">97%</p>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
-  </html>
+          </html>
