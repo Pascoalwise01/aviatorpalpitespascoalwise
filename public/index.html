@@ -3,38 +3,62 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aviator Palpites - Pascoal Wise</title>
+  <title>Pascoal Wise Predictor</title>
+  <link rel="icon" href="icon.png" type="image/png" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>✈️ Aviator Palpites</h1>
+  <header>
+    <h1>🎯 Pascoal Wise Predictor</h1>
+  </header>
 
-    <div id="historico">
-      <h3>Histórico carregado</h3>
-      <textarea id="dadosHistorico" placeholder="Cole aqui os dados do histórico..."></textarea>
-      <button id="carregarHistorico">Carregar histórico</button>
-    </div>
+  <main>
+    <section class="upload-section">
+      <h2>📤 Carregar histórico do Aviator</h2>
+      <input type="file" id="fileInput" accept="image/*" />
+      <button id="uploadBtn">Enviar Histórico</button>
+      <p id="uploadStatus"></p>
+    </section>
 
-    <div id="painel-palpite">
-      <h3>Gerar palpite</h3>
-      <button id="gerarPalpite">🎯 Gerar Palpite</button>
-      <p id="resultadoPalpite"></p>
+    <section class="predict-section">
+      <h2>🎯 Palpite Automático</h2>
+      <button id="generateBtn">Gerar Palpite</button>
 
-      <div id="avaliacao" class="hidden">
-        <h4>O resultado deu certo?</h4>
-        <button id="acertou">✅ Acertou</button>
-        <button id="errou">❌ Errou</button>
-        <input id="valorCorreto" placeholder="Digite o valor que realmente caiu" class="hidden"/>
+      <div id="predictionBox" class="hidden">
+        <p id="predictionText"></p>
+        <div class="actions">
+          <button id="acertouBtn" class="acertou">✅ Acertou</button>
+          <button id="errouBtn" class="errou">❌ Errou</button>
+        </div>
       </div>
-    </div>
 
-    <div id="estatisticas">
-      <h3>Precisão</h3>
-      <p id="precisao">97%</p>
-    </div>
-  </div>
+      <div id="manualFix" class="hidden">
+        <h3>🔧 Corrigir rodada manualmente</h3>
+        <input type="text" id="manualValue" placeholder="Ex: 3.45" />
+        <button id="corrigirBtn">Corrigir</button>
+      </div>
+    </section>
+
+    <section class="stats-section">
+      <h2>📊 Histórico de Palpites</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Hora</th>
+            <th>Palpite</th>
+            <th>Resultado</th>
+          </tr>
+        </thead>
+        <tbody id="historyTable"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer>
+    <p>Feito com 💜 por <a href="https://games.elephantbet.co.ao/LaunchGame" target="_blank">Pascoal Wise</a></p>
+  </footer>
 
   <script src="script.js"></script>
 </body>
-          </html>
+                                </html>
